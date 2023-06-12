@@ -1,36 +1,49 @@
-# SAP-samples/repository-template
-This default template for SAP Samples repositories includes files for README, LICENSE, and .reuse/dep5. All repositories on github.com/SAP-samples will be created based on this template.
+# Incidents Management
 
-# Containing Files
+Welcome to the Incidents Management reference sample app for CAP.
 
-1. The LICENSE file:
-In most cases, the license for SAP sample projects is `Apache 2.0`.
+### Domain
 
-2. The .reuse/dep5 file: 
-The [Reuse Tool](https://reuse.software/) must be used for your samples project. You can find the .reuse/dep5 in the project initial. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository.
+The application allows customers to create incidents, processed by support team members. 
+Both add comments to a conversation.
+Eventually, a repair appointment is created with a service worker assigned. 
 
-3. The README.md file (this file):
-Please edit this file as it is the primary description file for your project. You can find some placeholder titles for sections below.
+![domain drawio](https://media.github.tools.sap/user/6282/files/7b7d0cee-523c-4b16-950b-de8db2f8e380)
 
-# [Title]
-<!-- Please include descriptive title -->
 
-<!--- Register repository https://api.reuse.software/register, then add REUSE badge:
-[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/REPO-NAME)](https://api.reuse.software/info/github.com/SAP-samples/REPO-NAME)
--->
+### Setup
 
-## Description
-<!-- Please include SEO-friendly description -->
+```sh
+git clone https://github.com/SAP-samples/incidents-mgmt.git
+cd incidents-mgmt
+```
+```sh
+npm i
+```
 
-## Requirements
+### Run
 
-## Download and Installation
+```sh
+cds w
+```
 
-## Known Issues
-<!-- You may simply state "No known issues. -->
+### Testing
+
+```sh
+npm t
+```
+
+### UI Preview
+The initial app state does not include dedicated Fiori UIs. However, there is a preview functionality that allows to see dynamically generated UIs.
+
+- Start the application with `cds w`
+- Open the server URL : `http://localhost:4004` on the browser
+- Click on Fiori Preview e.g. next to Service Endpoint `/incidents` on Entity `Incidents`
+- On the authentication popup enter `alice` with no password (if you get a forbidden error and the popup doesn't show try incognito mode or clearing browsing data)
+
 
 ## How to obtain support
-[Create an issue](https://github.com/SAP-samples/<repository-name>/issues) in this repository if you find a bug or have questions about the content.
+[Create an issue](https://github.com/SAP-samples/incidents-mgmt/issues) in this repository if you find a bug or have questions about the content.
  
 For additional support, [ask a question in SAP Community](https://answers.sap.com/questions/ask.html).
 
