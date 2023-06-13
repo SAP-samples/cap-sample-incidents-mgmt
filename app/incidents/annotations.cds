@@ -7,11 +7,14 @@ annotate service.Incidents with @(
             $Type : 'UI.DataField',
             Value : title,
         },
+        //rok: raus
+        /*
         {
             $Type : 'UI.DataField',
             Value : customer.name,
             Label : '{i18n>Customer}',
         },
+        */
         {
             $Type : 'UI.DataField',
             Value : status.descr,
@@ -38,11 +41,14 @@ annotate service.Incidents with @(
                 Value : ID,
                 Label : 'ID',
             },
+            //rok: raus
+            /*
             {
                 $Type : 'UI.DataField',
                 Value : customer_ID,
                 Label : 'Customer',
             },
+            */
         ],
     },
     UI.Facets : [
@@ -104,10 +110,13 @@ annotate service.Incidents with @(
         },
         TypeName : '',
         TypeNamePlural : '',
+        //rok: raus
+        /*
         Description : {
             $Type : 'UI.DataField',
             Value : customer.name,
         },
+        */
         TypeImageUrl : 'sap-icon://alert',
     }
 );
@@ -177,6 +186,8 @@ annotate service.Incidents with {
     status @Common.Text : status.descr
 };
 
+//rok: raus
+/*
 annotate service.Customers with {
     ID @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -195,6 +206,7 @@ annotate service.Customers with {
                 ![@UI.TextArrangement] : #TextOnly,
             }
 )};
+
 annotate service.Incidents with {
     customer @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -222,6 +234,7 @@ annotate service.Incidents with {
         },
         Common.ValueListWithFixedValues : false
 )};
+
 annotate service.Incidents with {
     customer @Common.Text : {
         $value : customer.name,
@@ -240,3 +253,4 @@ annotate service.Customers with @(
         ],
     }
 );
+*/
