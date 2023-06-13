@@ -7,14 +7,6 @@ annotate service.Incidents with @(
             $Type : 'UI.DataField',
             Value : title,
         },
-        //rok: raus
-        /*
-        {
-            $Type : 'UI.DataField',
-            Value : customer.name,
-            Label : '{i18n>Customer}',
-        },
-        */
         {
             $Type : 'UI.DataField',
             Value : status.descr,
@@ -41,14 +33,6 @@ annotate service.Incidents with @(
                 Value : ID,
                 Label : 'ID',
             },
-            //rok: raus
-            /*
-            {
-                $Type : 'UI.DataField',
-                Value : customer_ID,
-                Label : 'Customer',
-            },
-            */
         ],
     },
     UI.Facets : [
@@ -110,13 +94,6 @@ annotate service.Incidents with @(
         },
         TypeName : '',
         TypeNamePlural : '',
-        //rok: raus
-        /*
-        Description : {
-            $Type : 'UI.DataField',
-            Value : customer.name,
-        },
-        */
         TypeImageUrl : 'sap-icon://alert',
     }
 );
@@ -186,71 +163,4 @@ annotate service.Incidents with {
     status @Common.Text : status.descr
 };
 
-//rok: raus
-/*
-annotate service.Customers with {
-    ID @(Common.ValueList : {
-            $Type : 'Common.ValueListType',
-            CollectionPath : 'Customers',
-            Parameters : [
-                {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : ID,
-                    ValueListProperty : 'ID',
-                },
-            ],
-        },
-        Common.ValueListWithFixedValues : true,
-        Common.Text : {
-                $value : name,
-                ![@UI.TextArrangement] : #TextOnly,
-            }
-)};
 
-annotate service.Incidents with {
-    customer @(Common.ValueList : {
-            $Type : 'Common.ValueListType',
-            CollectionPath : 'Customers',
-            Parameters : [
-                {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : customer_ID,
-                    ValueListProperty : 'ID',
-                },
-                {
-                    $Type : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'name',
-                },
-                {
-                    $Type : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'email',
-                },
-                {
-                    $Type : 'Common.ValueListParameterDisplayOnly',
-                    ValueListProperty : 'city',
-                },
-            ],
-        PresentationVariantQualifier : 'vh_Incidents_customer',
-        },
-        Common.ValueListWithFixedValues : false
-)};
-
-annotate service.Incidents with {
-    customer @Common.Text : {
-        $value : customer.name,
-        ![@UI.TextArrangement] : #TextOnly,
-    }
-};
-annotate service.Customers with @(
-    UI.PresentationVariant #vh_Incidents_customer : {
-        $Type : 'UI.PresentationVariantType',
-        SortOrder : [
-            {
-                $Type : 'Common.SortOrderType',
-                Property : name,
-                Descending : false,
-            },
-        ],
-    }
-);
-*/
