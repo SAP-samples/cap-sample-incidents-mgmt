@@ -19,8 +19,7 @@
   },
   "scripts": {
     "watch": "cds watch",
-    "start": "cds run",
-    "test": "npx jest --silent"
+    "start": "cds run"
   },
   "private": true,
   "sapux": [
