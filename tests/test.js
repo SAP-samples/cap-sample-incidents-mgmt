@@ -17,7 +17,7 @@ describe('Test The GET Endpoints', () => {
     });
 
     it('Test Expand Entity Endpoint', async () => {
-      const { data } = await GET`/incidents/Customers?$select=firstName&$expand=incidents`;
+      const { data } = await GET`/odata/v4/incidents/Customers?$select=firstName&$expand=incidents`;
       expect(data).to.be.an('object');
     });
   });
@@ -26,7 +26,7 @@ describe('Test The GET Endpoints', () => {
     let draftId;
 
     it('Create an incident', async () => {
-      const { status, statusText, data } = await POST(`/incidents/Incidents`, {
+      const { status, statusText, data } = await POST(`/odata/v4/incidents/Incidents`, {
         title: 'test3',
         urgency_code: 'H',
         status_code: 'A',
@@ -38,18 +38,18 @@ describe('Test The GET Endpoints', () => {
 
     it('+ Activate the draft', async () => {
       const response = await POST(
-        `/incidents/Incidents(ID=${draftId},IsActiveEntity=false)/IncidentsService.draftActivate`
+        `/odata/v4/incidents/Incidents(ID=${draftId},IsActiveEntity=false)/IncidentsService.draftActivate`
       );
       expect(response.status).to.eql(201);
     });
 
     it('+ Test the verification status', async () => {
-      const response = await GET(`/incidents/Incidents(ID=${draftId},IsActiveEntity=true)`);
+      const response = await GET(`/odata/v4/incidents/Incidents(ID=${draftId},IsActiveEntity=true)`);
       expect(response.status).to.eql(200);
     });
 
     it('- Delete the Incident', async () => {
-      const response = await DELETE(`/incidents/Incidents(ID=${draftId},IsActiveEntity=true)`);
+      const response = await DELETE(`/odata/v4/incidents/Incidents(ID=${draftId},IsActiveEntity=true)`);
       expect(response.status).to.eql(204);
     });
   });
