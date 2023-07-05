@@ -6,6 +6,7 @@ Welcome to the Incidents Management reference sample app for CAP.
 
 The application allows customers to create incidents, processed by support team members. 
 Both add comments to a conversation.
+
 ![domain drawio](https://github.com/SAP-samples/cap-sample-incidents-mgmt/assets/12186013/a1de9cf1-1346-427d-b5a2-55a14428e8f5)
 
 
