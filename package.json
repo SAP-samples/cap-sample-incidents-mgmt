@@ -41,6 +41,11 @@
       "db": {
         "kind": "sql"
       }
+    },
+    "protocols": {
+      "odata-v4": {
+        "path": "/"
+      }
     }
   }
 }
