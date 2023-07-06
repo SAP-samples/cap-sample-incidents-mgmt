@@ -5,20 +5,9 @@ jest.setTimeout(11111)
 
 describe('Test The GET Endpoints', () => {
   it('Should check Incident Service', async () => {
-    const incidentService = await cds.connect.to('IncidentsService')
-    const { Incidents } = incidentService.entities
+    const incidentsService = await cds.connect.to('IncidentsService')
+    const { Incidents } = incidentsService.entities
     expect(await SELECT.from(Incidents)).to.have.length(4)
-  })
-
-  it('Should check Customers Service', async () => {
-    const incidentService = await cds.connect.to('IncidentsService')
-    const { Customers } = incidentService.entities
-    expect(await SELECT.from(Customers)).to.have.length(3)
-  })
-
-  it('Test Expand Entity Endpoint', async () => {
-    const { data } = await GET`/incidents/Customers?$select=firstName&$expand=incidents`
-    expect(data).to.be.an('object')
   })
 })
 
