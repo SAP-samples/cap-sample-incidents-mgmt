@@ -1,0 +1,21 @@
+{
+  "[development]": {
+    "auth": {
+      "passport": {
+        "strategy": "mock",
+        "users": {
+          "incident.support@tester.sap.com": {
+            "password": "initial",
+            "roles": ["support"]
+          },
+          "alice": {
+            "roles": ["support"]
+          },
+          "bob": {
+            "roles": ["support"]
+          }
+        }
+      }
+    }
+  }
+}

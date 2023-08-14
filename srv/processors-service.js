@@ -1,6 +1,6 @@
 const cds = require('@sap/cds')
 
-class IncidentsService extends cds.ApplicationService {
+class ProcessorsService extends cds.ApplicationService {
   /** Registering custom event handlers */
   init() {
     this.before("UPDATE", "Incidents", (req) => this.onUpdate(req));
@@ -27,4 +27,4 @@ class IncidentsService extends cds.ApplicationService {
       return req.reject(`Can't modify a closed incident`)
   }
 }
-module.exports = IncidentsService
+module.exports = ProcessorsService

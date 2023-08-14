@@ -13,32 +13,32 @@
         <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
     </edmx:Reference>
     <edmx:DataServices>
-        <Schema Namespace="IncidentsService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Schema Namespace="ProcessorsService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
             <EntityContainer Name="EntityContainer">
-                <EntitySet Name="Incidents" EntityType="IncidentsService.Incidents">
+                <EntitySet Name="Incidents" EntityType="ProcessorsService.Incidents">
                     <NavigationPropertyBinding Path="customer" Target="Customers"/>
                     <NavigationPropertyBinding Path="urgency" Target="Urgency"/>
                     <NavigationPropertyBinding Path="status" Target="Status"/>
                     <NavigationPropertyBinding Path="conversations" Target="Conversations"/>
                     <NavigationPropertyBinding Path="SiblingEntity" Target="Incidents"/>
                 </EntitySet>
-                <EntitySet Name="Customers" EntityType="IncidentsService.Customers">
+                <EntitySet Name="Customers" EntityType="ProcessorsService.Customers">
                     <NavigationPropertyBinding Path="incidents" Target="Incidents"/>
                 </EntitySet>
-                <EntitySet Name="Conversations" EntityType="IncidentsService.Conversations">
-                    <NavigationPropertyBinding Path="incidents" Target="Incidents"/>
-                    <NavigationPropertyBinding Path="SiblingEntity" Target="Conversations"/>
-                </EntitySet>
-                <EntitySet Name="Urgency" EntityType="IncidentsService.Urgency">
+                <EntitySet Name="Urgency" EntityType="ProcessorsService.Urgency">
                     <NavigationPropertyBinding Path="texts" Target="Urgency_texts"/>
                     <NavigationPropertyBinding Path="localized" Target="Urgency_texts"/>
                 </EntitySet>
-                <EntitySet Name="Status" EntityType="IncidentsService.Status">
+                <EntitySet Name="Status" EntityType="ProcessorsService.Status">
                     <NavigationPropertyBinding Path="texts" Target="Status_texts"/>
                     <NavigationPropertyBinding Path="localized" Target="Status_texts"/>
                 </EntitySet>
-                <EntitySet Name="Urgency_texts" EntityType="IncidentsService.Urgency_texts"/>
-                <EntitySet Name="Status_texts" EntityType="IncidentsService.Status_texts"/>
+                <EntitySet Name="Conversations" EntityType="ProcessorsService.Conversations">
+                    <NavigationPropertyBinding Path="incidents" Target="Incidents"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Conversations"/>
+                </EntitySet>
+                <EntitySet Name="Urgency_texts" EntityType="ProcessorsService.Urgency_texts"/>
+                <EntitySet Name="Status_texts" EntityType="ProcessorsService.Status_texts"/>
             </EntityContainer>
             <EntityType Name="Incidents">
                 <Key>
@@ -50,27 +50,27 @@
                 <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
                 <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
-                <NavigationProperty Name="customer" Type="IncidentsService.Customers" Partner="incidents">
+                <NavigationProperty Name="customer" Type="ProcessorsService.Customers" Partner="incidents">
                     <ReferentialConstraint Property="customer_ID" ReferencedProperty="ID"/>
                 </NavigationProperty>
                 <Property Name="customer_ID" Type="Edm.Guid"/>
                 <Property Name="title" Type="Edm.String"/>
-                <NavigationProperty Name="urgency" Type="IncidentsService.Urgency">
+                <NavigationProperty Name="urgency" Type="ProcessorsService.Urgency">
                     <ReferentialConstraint Property="urgency_code" ReferencedProperty="code"/>
                 </NavigationProperty>
                 <Property Name="urgency_code" Type="Edm.String"/>
-                <NavigationProperty Name="status" Type="IncidentsService.Status">
+                <NavigationProperty Name="status" Type="ProcessorsService.Status">
                     <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
                 </NavigationProperty>
                 <Property Name="status_code" Type="Edm.String"/>
-                <NavigationProperty Name="conversations" Type="Collection(IncidentsService.Conversations)" Partner="incidents">
+                <NavigationProperty Name="conversations" Type="Collection(ProcessorsService.Conversations)" Partner="incidents">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>
                 <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
                 <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
                 <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
-                <NavigationProperty Name="DraftAdministrativeData" Type="IncidentsService.DraftAdministrativeData" ContainsTarget="true"/>
-                <NavigationProperty Name="SiblingEntity" Type="IncidentsService.Incidents"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="ProcessorsService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="ProcessorsService.Incidents"/>
             </EntityType>
             <EntityType Name="Customers">
                 <Key>
@@ -88,8 +88,38 @@
                 <Property Name="city" Type="Edm.String"/>
                 <Property Name="postCode" Type="Edm.String"/>
                 <Property Name="streetAddress" Type="Edm.String"/>
-                <NavigationProperty Name="incidents" Type="Collection(IncidentsService.Incidents)" Partner="customer">
+                <NavigationProperty Name="incidents" Type="Collection(ProcessorsService.Incidents)" Partner="customer">
                     <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="name" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="Urgency">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <NavigationProperty Name="texts" Type="Collection(ProcessorsService.Urgency_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="ProcessorsService.Urgency_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Status">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <Property Name="criticality" Type="Edm.Int32"/>
+                <NavigationProperty Name="texts" Type="Collection(ProcessorsService.Status_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="ProcessorsService.Status_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
                 </NavigationProperty>
             </EntityType>
             <EntityType Name="Conversations">
@@ -102,7 +132,7 @@
                 <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
                 <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
-                <NavigationProperty Name="incidents" Type="IncidentsService.Incidents" Partner="conversations">
+                <NavigationProperty Name="incidents" Type="ProcessorsService.Incidents" Partner="conversations">
                     <ReferentialConstraint Property="incidents_ID" ReferencedProperty="ID"/>
                 </NavigationProperty>
                 <Property Name="incidents_ID" Type="Edm.Guid"/>
@@ -112,36 +142,8 @@
                 <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
                 <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
                 <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
-                <NavigationProperty Name="DraftAdministrativeData" Type="IncidentsService.DraftAdministrativeData" ContainsTarget="true"/>
-                <NavigationProperty Name="SiblingEntity" Type="IncidentsService.Conversations"/>
-            </EntityType>
-            <EntityType Name="Urgency">
-                <Key>
-                    <PropertyRef Name="code"/>
-                </Key>
-                <Property Name="name" Type="Edm.String" MaxLength="255"/>
-                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-                <Property Name="code" Type="Edm.String" Nullable="false"/>
-                <NavigationProperty Name="texts" Type="Collection(IncidentsService.Urgency_texts)">
-                    <OnDelete Action="Cascade"/>
-                </NavigationProperty>
-                <NavigationProperty Name="localized" Type="IncidentsService.Urgency_texts">
-                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
-                </NavigationProperty>
-            </EntityType>
-            <EntityType Name="Status">
-                <Key>
-                    <PropertyRef Name="code"/>
-                </Key>
-                <Property Name="name" Type="Edm.String" MaxLength="255"/>
-                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
-                <Property Name="code" Type="Edm.String" Nullable="false"/>
-                <NavigationProperty Name="texts" Type="Collection(IncidentsService.Status_texts)">
-                    <OnDelete Action="Cascade"/>
-                </NavigationProperty>
-                <NavigationProperty Name="localized" Type="IncidentsService.Status_texts">
-                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
-                </NavigationProperty>
+                <NavigationProperty Name="DraftAdministrativeData" Type="ProcessorsService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="ProcessorsService.Conversations"/>
             </EntityType>
             <EntityType Name="DraftAdministrativeData">
                 <Key>
@@ -177,61 +179,61 @@
                 <Property Name="code" Type="Edm.String" Nullable="false"/>
             </EntityType>
             <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
-                <Parameter Name="in" Type="IncidentsService.Incidents"/>
+                <Parameter Name="in" Type="ProcessorsService.Incidents"/>
                 <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
-                <ReturnType Type="IncidentsService.Incidents"/>
+                <ReturnType Type="ProcessorsService.Incidents"/>
             </Action>
             <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
-                <Parameter Name="in" Type="IncidentsService.Conversations"/>
+                <Parameter Name="in" Type="ProcessorsService.Conversations"/>
                 <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
-                <ReturnType Type="IncidentsService.Conversations"/>
+                <ReturnType Type="ProcessorsService.Conversations"/>
             </Action>
             <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
-                <Parameter Name="in" Type="IncidentsService.Incidents"/>
-                <ReturnType Type="IncidentsService.Incidents"/>
+                <Parameter Name="in" Type="ProcessorsService.Incidents"/>
+                <ReturnType Type="ProcessorsService.Incidents"/>
             </Action>
             <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
-                <Parameter Name="in" Type="IncidentsService.Incidents"/>
+                <Parameter Name="in" Type="ProcessorsService.Incidents"/>
                 <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
-                <ReturnType Type="IncidentsService.Incidents"/>
+                <ReturnType Type="ProcessorsService.Incidents"/>
             </Action>
-            <Annotations Target="IncidentsService.EntityContainer/Incidents">
+            <Annotations Target="ProcessorsService.EntityContainer/Incidents">
                 <Annotation Term="Common.DraftRoot">
                     <Record Type="Common.DraftRootType">
-                        <PropertyValue Property="ActivationAction" String="IncidentsService.draftActivate"/>
-                        <PropertyValue Property="EditAction" String="IncidentsService.draftEdit"/>
-                        <PropertyValue Property="PreparationAction" String="IncidentsService.draftPrepare"/>
+                        <PropertyValue Property="ActivationAction" String="ProcessorsService.draftActivate"/>
+                        <PropertyValue Property="EditAction" String="ProcessorsService.draftEdit"/>
+                        <PropertyValue Property="PreparationAction" String="ProcessorsService.draftPrepare"/>
                     </Record>
                 </Annotation>
             </Annotations>
-            <Annotations Target="IncidentsService.Incidents/createdAt">
+            <Annotations Target="ProcessorsService.Incidents/createdAt">
                 <Annotation Term="UI.HiddenFilter" Bool="true"/>
                 <Annotation Term="Core.Immutable" Bool="true"/>
                 <Annotation Term="Core.Computed" Bool="true"/>
                 <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
                 </Annotations>
-                <Annotations Target="IncidentsService.Incidents/createdBy">
+                <Annotations Target="ProcessorsService.Incidents/createdBy">
                     <Annotation Term="UI.HiddenFilter" Bool="true"/>
                     <Annotation Term="Core.Immutable" Bool="true"/>
                     <Annotation Term="Core.Computed" Bool="true"/>
                     <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
                         <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
                         </Annotations>
-                        <Annotations Target="IncidentsService.Incidents/modifiedAt">
+                        <Annotations Target="ProcessorsService.Incidents/modifiedAt">
                             <Annotation Term="UI.HiddenFilter" Bool="true"/>
                             <Annotation Term="Core.Computed" Bool="true"/>
                             <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
                             </Annotations>
-                            <Annotations Target="IncidentsService.Incidents/modifiedBy">
+                            <Annotations Target="ProcessorsService.Incidents/modifiedBy">
                                 <Annotation Term="UI.HiddenFilter" Bool="true"/>
                                 <Annotation Term="Core.Computed" Bool="true"/>
                                 <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
                                     <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/title">
+                                    <Annotations Target="ProcessorsService.Incidents/title">
                                         <Annotation Term="Common.Label" String="Title"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/urgency_code">
+                                    <Annotations Target="ProcessorsService.Incidents/urgency_code">
                                         <Annotation Term="Common.ValueList">
                                             <Record Type="Common.ValueListType">
                                                 <PropertyValue Property="Label" String="Urgency"/>
@@ -250,7 +252,7 @@
                                             </Record>
                                         </Annotation>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/status_code">
+                                    <Annotations Target="ProcessorsService.Incidents/status_code">
                                         <Annotation Term="Common.ValueList">
                                             <Record Type="Common.ValueListType">
                                                 <PropertyValue Property="Label" String="Status"/>
@@ -269,206 +271,209 @@
                                             </Record>
                                         </Annotation>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/IsActiveEntity">
+                                    <Annotations Target="ProcessorsService.Incidents/IsActiveEntity">
                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/HasActiveEntity">
+                                    <Annotations Target="ProcessorsService.Incidents/HasActiveEntity">
                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/HasDraftEntity">
+                                    <Annotations Target="ProcessorsService.Incidents/HasDraftEntity">
                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Incidents/DraftAdministrativeData">
+                                    <Annotations Target="ProcessorsService.Incidents/DraftAdministrativeData">
                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                     </Annotations>
-                                    <Annotations Target="IncidentsService.Customers/createdAt">
+                                    <Annotations Target="ProcessorsService.Customers/createdAt">
                                         <Annotation Term="UI.HiddenFilter" Bool="true"/>
                                         <Annotation Term="Core.Immutable" Bool="true"/>
                                         <Annotation Term="Core.Computed" Bool="true"/>
                                         <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
                                         </Annotations>
-                                        <Annotations Target="IncidentsService.Customers/createdBy">
+                                        <Annotations Target="ProcessorsService.Customers/createdBy">
                                             <Annotation Term="UI.HiddenFilter" Bool="true"/>
                                             <Annotation Term="Core.Immutable" Bool="true"/>
                                             <Annotation Term="Core.Computed" Bool="true"/>
                                             <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
                                                 <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
                                                 </Annotations>
-                                                <Annotations Target="IncidentsService.Customers/modifiedAt">
+                                                <Annotations Target="ProcessorsService.Customers/modifiedAt">
                                                     <Annotation Term="UI.HiddenFilter" Bool="true"/>
                                                     <Annotation Term="Core.Computed" Bool="true"/>
                                                     <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
                                                     </Annotations>
-                                                    <Annotations Target="IncidentsService.Customers/modifiedBy">
+                                                    <Annotations Target="ProcessorsService.Customers/modifiedBy">
                                                         <Annotation Term="UI.HiddenFilter" Bool="true"/>
                                                         <Annotation Term="Core.Computed" Bool="true"/>
                                                         <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
                                                             <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
                                                             </Annotations>
-                                                            <Annotations Target="IncidentsService.EntityContainer/Conversations">
-                                                                <Annotation Term="Common.DraftNode">
-                                                                    <Record Type="Common.DraftNodeType">
-                                                                        <PropertyValue Property="PreparationAction" String="IncidentsService.draftPrepare"/>
-                                                                    </Record>
+                                                            <Annotations Target="ProcessorsService.Customers/name">
+                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="ProcessorsService.Urgency">
+                                                                <Annotation Term="UI.Identification">
+                                                                    <Collection>
+                                                                        <Record Type="UI.DataField">
+                                                                            <PropertyValue Property="Value" Path="name"/>
+                                                                        </Record>
+                                                                    </Collection>
                                                                 </Annotation>
                                                             </Annotations>
-                                                            <Annotations Target="IncidentsService.Conversations/createdAt">
-                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
-                                                                <Annotation Term="Core.Immutable" Bool="true"/>
-                                                                <Annotation Term="Core.Computed" Bool="true"/>
-                                                                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                            <Annotations Target="ProcessorsService.Urgency/name">
+                                                                <Annotation Term="Common.Label" String="{i18n>Name}"/>
                                                                 </Annotations>
-                                                                <Annotations Target="IncidentsService.Conversations/createdBy">
-                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
-                                                                    <Annotation Term="Core.Immutable" Bool="true"/>
-                                                                    <Annotation Term="Core.Computed" Bool="true"/>
-                                                                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
-                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                                <Annotations Target="ProcessorsService.Urgency/descr">
+                                                                    <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="ProcessorsService.Urgency/code">
+                                                                        <Annotation Term="Validation.AllowedValues">
+                                                                            <Collection>
+                                                                                <Record Type="Validation.AllowedValue">
+                                                                                    <Annotation Term="Core.SymbolicName" String="high"/>
+                                                                                    <PropertyValue Property="Value" String="H"/>
+                                                                                </Record>
+                                                                                <Record Type="Validation.AllowedValue">
+                                                                                    <Annotation Term="Core.SymbolicName" String="medium"/>
+                                                                                    <PropertyValue Property="Value" String="M"/>
+                                                                                </Record>
+                                                                                <Record Type="Validation.AllowedValue">
+                                                                                    <Annotation Term="Core.SymbolicName" String="low"/>
+                                                                                    <PropertyValue Property="Value" String="L"/>
+                                                                                </Record>
+                                                                            </Collection>
+                                                                        </Annotation>
+                                                                    </Annotations>
+                                                                    <Annotations Target="ProcessorsService.Status">
+                                                                        <Annotation Term="UI.Identification">
+                                                                            <Collection>
+                                                                                <Record Type="UI.DataField">
+                                                                                    <PropertyValue Property="Value" Path="name"/>
+                                                                                </Record>
+                                                                            </Collection>
+                                                                        </Annotation>
+                                                                    </Annotations>
+                                                                    <Annotations Target="ProcessorsService.Status/name">
+                                                                        <Annotation Term="Common.Label" String="{i18n>Name}"/>
                                                                         </Annotations>
-                                                                        <Annotations Target="IncidentsService.Conversations/modifiedAt">
-                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
-                                                                            <Annotation Term="Core.Computed" Bool="true"/>
-                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                                        <Annotations Target="ProcessorsService.Status/descr">
+                                                                            <Annotation Term="Common.Label" String="{i18n>Description}"/>
                                                                             </Annotations>
-                                                                            <Annotations Target="IncidentsService.Conversations/modifiedBy">
+                                                                            <Annotations Target="ProcessorsService.Status/code">
+                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                    <Collection>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="new"/>
+                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                        </Record>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="assigned"/>
+                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                        </Record>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="in_process"/>
+                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                        </Record>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="on_hold"/>
+                                                                                            <PropertyValue Property="Value" String="H"/>
+                                                                                        </Record>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="resolved"/>
+                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                        </Record>
+                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                            <Annotation Term="Core.SymbolicName" String="closed"/>
+                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                        </Record>
+                                                                                    </Collection>
+                                                                                </Annotation>
+                                                                            </Annotations>
+                                                                            <Annotations Target="ProcessorsService.EntityContainer/Conversations">
+                                                                                <Annotation Term="Common.DraftNode">
+                                                                                    <Record Type="Common.DraftNodeType">
+                                                                                        <PropertyValue Property="PreparationAction" String="ProcessorsService.draftPrepare"/>
+                                                                                    </Record>
+                                                                                </Annotation>
+                                                                            </Annotations>
+                                                                            <Annotations Target="ProcessorsService.Conversations/createdAt">
                                                                                 <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                <Annotation Term="Core.Immutable" Bool="true"/>
                                                                                 <Annotation Term="Core.Computed" Bool="true"/>
-                                                                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
-                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Conversations/author">
-                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Conversations/IsActiveEntity">
-                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Conversations/HasActiveEntity">
-                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Conversations/HasDraftEntity">
-                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Conversations/DraftAdministrativeData">
-                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Urgency">
-                                                                                        <Annotation Term="UI.Identification">
-                                                                                            <Collection>
-                                                                                                <Record Type="UI.DataField">
-                                                                                                    <PropertyValue Property="Value" Path="name"/>
-                                                                                                </Record>
-                                                                                            </Collection>
-                                                                                        </Annotation>
-                                                                                    </Annotations>
-                                                                                    <Annotations Target="IncidentsService.Urgency/name">
-                                                                                        <Annotation Term="Common.Label" String="{i18n>Name}"/>
+                                                                                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                                                </Annotations>
+                                                                                <Annotations Target="ProcessorsService.Conversations/createdBy">
+                                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                    <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
                                                                                         </Annotations>
-                                                                                        <Annotations Target="IncidentsService.Urgency/descr">
-                                                                                            <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                                        <Annotations Target="ProcessorsService.Conversations/modifiedAt">
+                                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
                                                                                             </Annotations>
-                                                                                            <Annotations Target="IncidentsService.Urgency/code">
-                                                                                                <Annotation Term="Validation.AllowedValues">
-                                                                                                    <Collection>
-                                                                                                        <Record Type="Validation.AllowedValue">
-                                                                                                            <Annotation Term="Core.SymbolicName" String="high"/>
-                                                                                                            <PropertyValue Property="Value" String="H"/>
-                                                                                                        </Record>
-                                                                                                        <Record Type="Validation.AllowedValue">
-                                                                                                            <Annotation Term="Core.SymbolicName" String="medium"/>
-                                                                                                            <PropertyValue Property="Value" String="M"/>
-                                                                                                        </Record>
-                                                                                                        <Record Type="Validation.AllowedValue">
-                                                                                                            <Annotation Term="Core.SymbolicName" String="low"/>
-                                                                                                            <PropertyValue Property="Value" String="L"/>
-                                                                                                        </Record>
-                                                                                                    </Collection>
-                                                                                                </Annotation>
-                                                                                            </Annotations>
-                                                                                            <Annotations Target="IncidentsService.Status">
-                                                                                                <Annotation Term="UI.Identification">
-                                                                                                    <Collection>
-                                                                                                        <Record Type="UI.DataField">
-                                                                                                            <PropertyValue Property="Value" Path="name"/>
-                                                                                                        </Record>
-                                                                                                    </Collection>
-                                                                                                </Annotation>
-                                                                                            </Annotations>
-                                                                                            <Annotations Target="IncidentsService.Status/name">
-                                                                                                <Annotation Term="Common.Label" String="{i18n>Name}"/>
-                                                                                                </Annotations>
-                                                                                                <Annotations Target="IncidentsService.Status/descr">
-                                                                                                    <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                                            <Annotations Target="ProcessorsService.Conversations/modifiedBy">
+                                                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
                                                                                                     </Annotations>
-                                                                                                    <Annotations Target="IncidentsService.Status/code">
-                                                                                                        <Annotation Term="Validation.AllowedValues">
-                                                                                                            <Collection>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="new"/>
-                                                                                                                    <PropertyValue Property="Value" String="N"/>
-                                                                                                                </Record>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="assigned"/>
-                                                                                                                    <PropertyValue Property="Value" String="A"/>
-                                                                                                                </Record>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="in_process"/>
-                                                                                                                    <PropertyValue Property="Value" String="I"/>
-                                                                                                                </Record>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="on_hold"/>
-                                                                                                                    <PropertyValue Property="Value" String="H"/>
-                                                                                                                </Record>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="resolved"/>
-                                                                                                                    <PropertyValue Property="Value" String="R"/>
-                                                                                                                </Record>
-                                                                                                                <Record Type="Validation.AllowedValue">
-                                                                                                                    <Annotation Term="Core.SymbolicName" String="closed"/>
-                                                                                                                    <PropertyValue Property="Value" String="C"/>
-                                                                                                                </Record>
-                                                                                                            </Collection>
-                                                                                                        </Annotation>
+                                                                                                    <Annotations Target="ProcessorsService.Conversations/author">
+                                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
                                                                                                     </Annotations>
-                                                                                                    <Annotations Target="IncidentsService.DraftAdministrativeData">
+                                                                                                    <Annotations Target="ProcessorsService.Conversations/IsActiveEntity">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="ProcessorsService.Conversations/HasActiveEntity">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="ProcessorsService.Conversations/HasDraftEntity">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="ProcessorsService.Conversations/DraftAdministrativeData">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="ProcessorsService.DraftAdministrativeData">
                                                                                                         <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
                                                                                                         </Annotations>
-                                                                                                        <Annotations Target="IncidentsService.DraftAdministrativeData/DraftUUID">
+                                                                                                        <Annotations Target="ProcessorsService.DraftAdministrativeData/DraftUUID">
                                                                                                             <Annotation Term="UI.Hidden" Bool="true"/>
                                                                                                             <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}"/>
                                                                                                             </Annotations>
-                                                                                                            <Annotations Target="IncidentsService.DraftAdministrativeData/CreationDateTime">
+                                                                                                            <Annotations Target="ProcessorsService.DraftAdministrativeData/CreationDateTime">
                                                                                                                 <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}"/>
                                                                                                                 </Annotations>
-                                                                                                                <Annotations Target="IncidentsService.DraftAdministrativeData/CreatedByUser">
+                                                                                                                <Annotations Target="ProcessorsService.DraftAdministrativeData/CreatedByUser">
                                                                                                                     <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}"/>
                                                                                                                     </Annotations>
-                                                                                                                    <Annotations Target="IncidentsService.DraftAdministrativeData/DraftIsCreatedByMe">
+                                                                                                                    <Annotations Target="ProcessorsService.DraftAdministrativeData/DraftIsCreatedByMe">
                                                                                                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                                                                                                         <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}"/>
                                                                                                                         </Annotations>
-                                                                                                                        <Annotations Target="IncidentsService.DraftAdministrativeData/LastChangeDateTime">
+                                                                                                                        <Annotations Target="ProcessorsService.DraftAdministrativeData/LastChangeDateTime">
                                                                                                                             <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}"/>
                                                                                                                             </Annotations>
-                                                                                                                            <Annotations Target="IncidentsService.DraftAdministrativeData/LastChangedByUser">
+                                                                                                                            <Annotations Target="ProcessorsService.DraftAdministrativeData/LastChangedByUser">
                                                                                                                                 <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}"/>
                                                                                                                                 </Annotations>
-                                                                                                                                <Annotations Target="IncidentsService.DraftAdministrativeData/InProcessByUser">
+                                                                                                                                <Annotations Target="ProcessorsService.DraftAdministrativeData/InProcessByUser">
                                                                                                                                     <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}"/>
                                                                                                                                     </Annotations>
-                                                                                                                                    <Annotations Target="IncidentsService.DraftAdministrativeData/DraftIsProcessedByMe">
+                                                                                                                                    <Annotations Target="ProcessorsService.DraftAdministrativeData/DraftIsProcessedByMe">
                                                                                                                                         <Annotation Term="UI.Hidden" Bool="true"/>
                                                                                                                                         <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
                                                                                                                                         </Annotations>
-                                                                                                                                        <Annotations Target="IncidentsService.Urgency_texts/locale">
+                                                                                                                                        <Annotations Target="ProcessorsService.Urgency_texts/locale">
                                                                                                                                             <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
                                                                                                                                             </Annotations>
-                                                                                                                                            <Annotations Target="IncidentsService.Urgency_texts/name">
+                                                                                                                                            <Annotations Target="ProcessorsService.Urgency_texts/name">
                                                                                                                                                 <Annotation Term="Common.Label" String="{i18n>Name}"/>
                                                                                                                                                 </Annotations>
-                                                                                                                                                <Annotations Target="IncidentsService.Urgency_texts/descr">
+                                                                                                                                                <Annotations Target="ProcessorsService.Urgency_texts/descr">
                                                                                                                                                     <Annotation Term="Common.Label" String="{i18n>Description}"/>
                                                                                                                                                     </Annotations>
-                                                                                                                                                    <Annotations Target="IncidentsService.Urgency_texts/code">
+                                                                                                                                                    <Annotations Target="ProcessorsService.Urgency_texts/code">
                                                                                                                                                         <Annotation Term="Validation.AllowedValues">
                                                                                                                                                             <Collection>
                                                                                                                                                                 <Record Type="Validation.AllowedValue">
@@ -486,16 +491,16 @@
                                                                                                                                                             </Collection>
                                                                                                                                                         </Annotation>
                                                                                                                                                     </Annotations>
-                                                                                                                                                    <Annotations Target="IncidentsService.Status_texts/locale">
+                                                                                                                                                    <Annotations Target="ProcessorsService.Status_texts/locale">
                                                                                                                                                         <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
                                                                                                                                                         </Annotations>
-                                                                                                                                                        <Annotations Target="IncidentsService.Status_texts/name">
+                                                                                                                                                        <Annotations Target="ProcessorsService.Status_texts/name">
                                                                                                                                                             <Annotation Term="Common.Label" String="{i18n>Name}"/>
                                                                                                                                                             </Annotations>
-                                                                                                                                                            <Annotations Target="IncidentsService.Status_texts/descr">
+                                                                                                                                                            <Annotations Target="ProcessorsService.Status_texts/descr">
                                                                                                                                                                 <Annotation Term="Common.Label" String="{i18n>Description}"/>
                                                                                                                                                                 </Annotations>
-                                                                                                                                                                <Annotations Target="IncidentsService.Status_texts/code">
+                                                                                                                                                                <Annotations Target="ProcessorsService.Status_texts/code">
                                                                                                                                                                     <Annotation Term="Validation.AllowedValues">
                                                                                                                                                                         <Collection>
                                                                                                                                                                             <Record Type="Validation.AllowedValue">

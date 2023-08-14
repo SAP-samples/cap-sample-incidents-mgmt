@@ -12,29 +12,29 @@
         "resources": "resources.json",
         "sourceTemplate": {
             "id": "@sap/generator-fiori:lrop",
-            "version": "1.8.6",
-            "toolsId": "5cadeb32-6cb7-4087-9a61-c248670aae1d"
+            "version": "1.9.7",
+            "toolsId": "b6e2272d-1167-41a4-baed-217444579193"
         },
+        "crossNavigation": {
+            "inbounds": {
+              "intent1": {
+                "signature": {
+                  "parameters": {},
+                  "additionalParameters": "allowed"
+                },
+                "semanticObject": "Incidents",
+                "action": "display"
+              }
+            }
+          },
         "dataSources": {
             "mainService": {
-                "uri": "/odata/v4/incidents/",
+                "uri": "/odata/v4/processors/",
                 "type": "OData",
                 "settings": {
                     "annotations": [],
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "4.0"
-                }
-            }
-        },
-        "crossNavigation": {
-            "inbounds": {
-                "intent1":{
-                    "signature": {
-                        "parameters": {},
-                        "additionalParameters": "allowed"
-                    },
-                    "semanticObject": "Incidents",
-                    "action": "display"
                 }
             }
         }
@@ -58,7 +58,7 @@
     "sap.ui5": {
         "flexEnabled": true,
         "dependencies": {
-            "minUI5Version": "1.113.0",
+            "minUI5Version": "1.115.0",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},
@@ -158,6 +158,7 @@
                             "controlConfiguration": {
                                 "conversations/@com.sap.vocabularies.UI.v1.LineItem#i18nConversations": {
                                     "tableSettings": {
+                                        "type": "ResponsiveTable",
                                         "creationMode": {
                                             "name": "Inline"
                                         }
