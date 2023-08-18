@@ -41,21 +41,21 @@
       },
       "[development]": {
         "auth": {
-                "kind": "mocked",
-                "users": {
-                  "incident.support@tester.sap.com": {
-                    "password": "initial",
-                    "roles": ["support"]
-                  },
-                  "alice": {
-                    "roles": ["support"]
-                  },
-                  "bob": {
-                    "roles": ["support"]
-                  }
-                }
-              }
-      }
+          "kind": "mocked",
+          "users": {
+            "incident.support@tester.sap.com": {
+              "password": "initial",
+              "roles": ["support"]
+            },
+            "alice": {
+              "roles": ["support"]
+            },
+            "bob": {
+              "roles": ["support"]
+            }
+          }
+        }
+      },
       "db": {
         "kind": "sql"
       }
