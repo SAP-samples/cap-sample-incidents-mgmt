@@ -1,8 +1,8 @@
 {
   "[development]": {
-    "auth": {
-      "passport": {
-        "strategy": "mock",
+    "requires": {
+      "auth": {
+        "kind": "mocked",
         "users": {
           "incident.support@tester.sap.com": {
             "password": "initial",
