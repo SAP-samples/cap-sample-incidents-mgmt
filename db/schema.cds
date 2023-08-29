@@ -21,7 +21,7 @@ entity Customers : cuid, managed {
  */
 entity Incidents : cuid, managed {
    customer     : Association to Customers;
-   title        : String  @title : 'Title';
+   title        : localized String  @title : 'Title';
    urgency      : Association to Urgency;
    status       : Association to Status;
    conversations: Composition of many Conversations on conversations.incidents = $self;
@@ -36,7 +36,7 @@ entity Status : CodeList {
         resolved = 'R';
         closed = 'C';
 };
-    criticality : Integer; 
+    criticality : Integer;
 }
 
 entity Urgency : CodeList {
@@ -51,7 +51,7 @@ entity Urgency : CodeList {
          incidents : Association to Incidents;
          timestamp : DateTime;
          author    : String @cds.on.insert: $user;
-         message   : String;
+         message   : localized String;
    }
 
 type EMailAddress : String;
