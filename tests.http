@@ -1,0 +1,26 @@
+###
+# @name IncidentsCreate
+
+POST http://localhost:4004/incidents/Incidents
+Content-Type: application/json
+
+{
+  "title": "New incident",
+  "customer_ID": "Z100001"
+}
+
+###
+@id = {{IncidentsCreate.response.body.$.ID}}
+
+POST http://localhost:4004/incidents/Incidents(ID={{id}},IsActiveEntity=false)/draftActivate
+Content-Type: application/json
+
+
+###
+PUT http://localhost:4004/api-business-partner/A_BusinessPartner/Z100001
+Authorization: : Basic carol:
+Content-Type:application/json
+
+{
+    "BusinessPartnerFullName": "Dutch Van der Linde"
+}
